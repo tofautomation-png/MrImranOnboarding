@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Targetime • Imran Butt Onboarding</title>
+  <style>
+    :root{
+      --ink:#0b0f14;
+      --text:#ffffff;
+      --muted:rgba(255,255,255,.70);
+      --muted-2:rgba(255,255,255,.55);
+      --brandA:#00FF85; /* neon green */
+      --brandB:#00FFC5; /* aqua green */
+      --card-bg:rgba(255,255,255,.06);
+      --card-border:rgba(255,255,255,.10);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: var(--ink);
+      color: var(--text);
+      font: 400 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      overflow-x:hidden;
+    }
+    /* Soft static brand background (no hard edges, no animation) */
+    .bg {
+      position: fixed; inset: 0; z-index: -2; opacity:.95;
+      background-image:
+        radial-gradient(60rem 60rem at 15% 20%, color-mix(in srgb, var(--brandA) 18%, transparent) 0%, transparent 60%),
+        radial-gradient(70rem 70rem at 85% 30%, color-mix(in srgb, var(--brandB) 16%, transparent) 0%, transparent 60%),
+        radial-gradient(80rem 80rem at 50% 85%, color-mix(in srgb, var(--brandA) 12%, transparent) 0%, transparent 65%);
+      background-repeat:no-repeat;
+      background-color: var(--ink);
+    }
+    .vignette {
+      position: fixed; inset:0; z-index:-1;
+      background: radial-gradient(120rem 60rem at 50% 120%, rgba(0,0,0,.65), transparent 60%);
+    }
+
+    .container{max-width:1100px; margin:0 auto; padding: 40px 20px}
+    @media (min-width:640px){ .container{padding:56px 24px} }
+    @media (min-width:900px){ .container{padding:64px 28px} }
+
+    .header{
+      display:flex; align-items:center; gap:14px; margin-bottom:28px;
+      letter-spacing:.12em; text-transform:uppercase; color:var(--muted);
+      font-size:13px;
+    }
+    .logo{width:48px; height:48px; object-fit:contain; filter: drop-shadow(0 0 18px color-mix(in srgb, var(--brandB) 35%, transparent));}
+    @media (min-width:640px){ .logo{width:56px;height:56px} .header{font-size:14px}}
+
+    .card{
+      position:relative; overflow:hidden;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 22px;
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      will-change: transform, opacity;
+    }
+    @media (min-width:768px){ .card{padding:28px} }
+
+    .card .soft-highlight{
+      position:absolute; inset:0; pointer-events:none; border-radius:18px;
+      background:
+        radial-gradient(1000px 220px at 10% 0%, rgba(255,255,255,.08), transparent 65%);
+    }
+
+    .h1{
+      margin:0 0 8px; font-weight:600;
+      font-size: clamp(22px, 2.4vw + 12px, 32px);
+      line-height:1.25;
+    }
+    .brand-gradient{
+      background: linear-gradient(90deg, var(--brandA), var(--brandB), var(--brandA));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .muted{color:var(--muted)}
+    .muted-2{color:var(--muted-2)}
+    .section{margin-top:26px}
+    @media (min-width:768px){ .section{margin-top:32px} }
+
+    h2{
+      margin:0; font-weight:600;
+      font-size: clamp(18px, 1.2vw + 14px, 22px);
+    }
+    .t-emerald{color:color-mix(in srgb, var(--brandA) 85%, white 15%)}
+    .t-cyan{color:color-mix(in srgb, var(--brandB) 85%, white 15%)}
+    .t-blue{color:#a8d4ff}
+    .t-violet{color:#ccb3ff}
+    .t-amber{color:#ffe6b4}
+
+    .list{margin:12px 0 0; padding-left:20px}
+    .list li{margin:6px 0}
+    .grid-days{display:grid; gap:12px; margin-top:16px}
+    @media (min-width:740px){ .grid-days{grid-template-columns:1fr 1fr} }
+    @media (min-width:1040px){ .grid-days{grid-template-columns:1fr 1fr 1fr} }
+
+    .day{
+      position:relative; overflow:hidden;
+      background: var(--card-bg);
+      border:1px solid var(--card-border);
+      border-radius:14px;
+      padding:16px 18px;
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+    .day .bg-soft{
+      position:absolute; inset:0; pointer-events:none; border-radius:14px;
+      background: radial-gradient(60rem 20rem at 10% 0%, color-mix(in srgb, var(--brandB) 14%, transparent), transparent 60%);
+    }
+    .day .kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted-2); margin-bottom:4px}
+    .day h3{margin:0 0 6px; font-size:16px; font-weight:600}
+    .day ul{margin:0; padding-left:18px; color:var(--muted); font-size:14px}
+    .footer{
+      border-top:1px solid var(--card-border);
+      margin-top:32px; padding-top:18px; text-align:center; font-size:12px; color:rgba(255,255,255,.5)
+    }
+
+    /* Light, fast entrance (no heavy animation) */
+    .reveal{opacity:0; transform: translateY(12px); transition: opacity .45s ease, transform .45s ease}
+    .reveal.show{opacity:1; transform:none}
+    @media (prefers-reduced-motion: reduce){
+      .reveal{opacity:1; transform:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="vignette"></div>
+
+  <main class="container">
+    <!-- Header -->
+    <div class="header reveal">
+      <img class="logo" src="https://framerusercontent.com/images/0Wv5hQVMLzh3f9CWZ4UtLjPjZU.png?scale-down-to=512" alt="Targetime logo" />
+      <div>Targetime • AI Content Automation</div>
+    </div>
+
+    <!-- Welcome (frosted, no gradient animation) -->
+    <section class="card reveal" aria-labelledby="welcome-title">
+      <div class="soft-highlight" aria-hidden="true"></div>
+      <div style="position:relative; z-index:1">
+        <h1 class="h1" id="welcome-title">
+          Welcome, <span class="brand-gradient">Mr Imran Butt</span>
+        </h1>
+        <p class="muted">
+          Below is your onboarding guide — from creating your custom avatar to scripting, batch video production, and automated scheduling for a full month of posts. Please share the requested details via <strong style="color:#fff">info@targetime.com</strong> or WhatsApp.
+        </p>
+        <p class="muted-2" style="margin:.3rem 0 0;">Project Window: <strong style="color:#fff">7 working days</strong></p>
+      </div>
+    </section>
+
+    <!-- 01 Avatar -->
+    <section class="card section reveal" aria-labelledby="avatar-title">
+      <div class="soft-highlight" aria-hidden="true"></div>
+      <div style="position:relative; z-index:1">
+        <h2 id="avatar-title" class="t-cyan">01 · Custom Avatar — Recording Requirements</h2>
+        <p class="muted" style="margin-top:10px">
+          Please record <strong style="color:#fff">2–5 minutes</strong> of high-resolution video (<strong>1080p or 4K</strong>) in a <strong>well-lit, quiet</strong> space. Look directly at the camera, speak naturally, <strong>pause with your mouth closed</strong> between sentences, and keep hand gestures <strong>below chest level</strong>.
+        </p>
+        <p class="muted-2" style="margin-top:8px">
+          <strong style="color:#fff">Live Consent:</strong> We’ll also capture a short consent video. Please be available for a <strong style="color:#fff">10-minute</strong> call during avatar creation.
+        </p>
+      </div>
+    </section>
+
+    <!-- 02 Audience -->
+    <section class="card section reveal" aria-labelledby="audience-title">
+      <div class="soft-highlight" aria-hidden="true"></div>
+      <div style="position:relative; z-index:1">
+        <h2 id="audience-title" class="t-emerald">02 · Audience Profile (7 Key Inputs)</h2>
+        <p class="muted" style="margin-top:8px">These will steer scripts, copy, visuals, and tone. Bullet replies are perfect.</p>
+        <ol class="list muted">
+          <li><strong style="color:#fff">Primary Audience Segment</strong> — first-time buyers, investors, luxury sellers, renters.</li>
+          <li><strong style="color:#fff">Location & Market Tier</strong> — target communities and price range (mid/upper-mid/luxury).</li>
+          <li><strong style="color:#fff">Buyer Pain Points</strong> — top 3 problems (financing, paperwork, market confusion, time).</li>
+          <li><strong style="color:#fff">Desired Outcomes</strong> — fast closings, best ROI, low hassle, exclusive deals.</li>
+          <li><strong style="color:#fff">Tone & Persona</strong> — energetic / expert / concierge / mentor; language mix (EN/AR/UR).</li>
+          <li><strong style="color:#fff">Content Themes</strong> — market tips, area spotlights, investment math, listings, testimonials.</li>
+          <li><strong style="color:#fff">Visual Direction</strong> — minimal vs dynamic, on-screen text density, b-roll preferences.</li>
+        </ol>
+        <p class="muted-2" style="margin-top:8px">Send to: <strong style="color:#fff">info@targetime.com</strong> or WhatsApp.</p>
+      </div>
+    </section>
+
+    <!-- 03 Access -->
+    <section class="card section reveal" aria-labelledby="access-title">
+      <div class="soft-highlight" aria-hidden="true"></div>
+      <div style="position:relative; z-index:1">
+        <h2 id="access-title" class="t-blue">03 · Third-Party Access (Facebook/Instagram/TikTok)</h2>
+        <p class="muted" style="margin-top:8px">We’ll need publishing access strictly for automated posting. Choose one:</p>
+        <ul class="list muted">
+          <li>Option A: Receive official step-by-step documents and grant access at your convenience.</li>
+          <li>Option B: A quick 15-minute screen-share to set it up live and confirm permissions.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 04 Timeline -->
+    <section class="card section reveal" aria-labelledby="timeline-title">
+      <div class="soft-highlight" aria-hidden="true"></div>
+      <div style="position:relative; z-index:1">
+        <h2 id="timeline-title" class="t-violet">04 · Timeline (7 Working Days)</h2>
+        <p class="muted" style="margin-top:8px">Sequenced milestones from avatar to full-month automation.</p>
+
+        <div class="grid-days">
+          <div class="day">
+            <div class="bg-soft" aria-hidden="true"></div>
+            <div class="kicker">Day 1</div>
+            <h3>Kickoff & Inputs</h3>
+            <ul>
+              <li>Confirm 7 audience inputs & language/tone</li>
+              <li>Select content themes & visual direction</li>
+              <li>Choose access method (docs or live)</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="bg-soft" aria-hidden="true"></div>
+            <div class="kicker">Day 2</div>
+            <h3>Avatar Capture</h3>
+            <ul>
+              <li>Record 2–5 min (1080p/4K)</li>
+              <li>10-min live consent call</li>
+              <li>Begin avatar training</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="bg-soft" aria-hidden="true"></div>
+            <div class="kicker">Day 3</div>
+            <h3>Scripting</h3>
+            <ul>
+              <li>Draft short-form scripts mapped to audience & themes</li>
+              <li>Tone calibration per persona</li>
+              <li>Light compliance/accuracy pass</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="bg-soft" aria-hidden="true"></div>
+            <div class="kicker">Day 4</div>
+            <h3>Avatar Assembly & Tests</h3>
+            <ul>
+              <li>Assemble avatar with initial scripts</li>
+              <li>Test renders (voice, lip-sync, pacing)</li>
+              <li>Minor adjustments if needed</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="bg-soft" aria-hidden="true"></div>
+            <div class="kicker">Day 5</div>
+            <h3>Batch Video Production</h3>
+            <ul>
+              <li>Render approved monthly batch</li>
+              <li>Add captions/overlays as per visual direction</li>
+              <li>Export final assets</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="bg-soft" aria-hidden="true"></div>
+            <div class="kicker">Day 6</div>
+            <h3>Access & Automation Setup</h3>
+            <ul>
+              <li>Confirm Meta/IG/TikTok permissions</li>
+              <li>Connect schedulers & set posting cadence</li>
+              <li>QA posting previews (no live yet)</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="bg-soft" aria-hidden="true"></div>
+            <div class="kicker">Day 7</div>
+            <h3>Scheduling & Final QA</h3>
+            <ul>
+              <li>Schedule the full month of posts</li>
+              <li>Final quality assurance pass</li>
+              <li>Handover summary (posting plan, asset index)</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="muted-2" style="margin-top:10px">Notes: Working days exclude weekends/public holidays. If approvals or access are delayed, the schedule adapts without changing the sequence.</p>
+      </div>
+    </section>
+
+    <!-- 05 Handoff -->
+    <section class="card section reveal" aria-labelledby="handoff-title">
+      <div class="soft-highlight" aria-hidden="true"></div>
+      <div style="position:relative; z-index:1">
+        <h2 id="handoff-title" class="t-amber">05 · How to Share Your Inputs</h2>
+        <div class="muted" style="margin-top:10px">
+          Please send:
+          <ul class="list">
+            <li>Avatar source video (2–5 mins, 1080p/4K)</li>
+            <li>Audience profile (7 inputs)</li>
+            <li>Access preference (documents vs live walk-through)</li>
+          </ul>
+          <div class="muted-2" style="margin-top:8px">
+            Email: <strong style="color:#fff">info@targetime.com</strong> · WhatsApp: share via your usual chat with our team.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">© <span id="yr"></span> Targetime. All rights reserved.</div>
+  </main>
+
+  <script>
+    // Lightweight intersection reveal (fast, no jank)
+    (function(){
+      const els=[...document.querySelectorAll('.reveal')];
+      const reveal=(el)=>el.classList.add('show');
+      const io=new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{ if(e.isIntersecting) reveal(e.target); });
+      },{root:null,rootMargin:"0px",threshold:.15});
+      els.forEach(el=>io.observe(el));
+      document.getElementById('yr').textContent = new Date().getFullYear();
+      // Respect reduced motion
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        els.forEach(reveal);
+      }
+    })();
+  </script>
+</body>
+</html>
